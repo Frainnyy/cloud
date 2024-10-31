@@ -38,11 +38,11 @@
         mysqli_stmt_close($stmt);
     }
 
-    // ค่าคงที่สำหรับฐานข้อมูล
-    define('DB_HOST', 'db');
-    define('DB_USERNAME', 'php_docker');
-    define('DB_PASSWORD', 'password');
-    define('DB_NAME', 'php_docker');
+    // ค่าคงที่สำหรับฐานข้อมูล RDS
+    define('DB_HOST', 'YOUR_RDS_ENDPOINT'); // เปลี่ยนเป็น RDS endpoint ของคุณ
+    define('DB_USERNAME', 'admin'); // ชื่อผู้ใช้ RDS
+    define('DB_PASSWORD', 'Password123!'); // รหัสผ่านของ RDS
+    define('DB_NAME', 'php_docker'); // ชื่อฐานข้อมูลที่คุณต้องการเข้าถึง
 
     // เชื่อมต่อฐานข้อมูล
     $connect = connectDatabase(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
