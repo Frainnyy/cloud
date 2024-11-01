@@ -8,7 +8,6 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id']; // Store the user_id from session
 
-echo "<div class='bg-green-100 p-4 text-green-800'>Logged in as User ID: " . $_SESSION['user_id'] . "</div>";
 
 function connectDatabase($host, $username, $password, $database)
 {
