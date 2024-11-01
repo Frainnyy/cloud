@@ -1,3 +1,53 @@
+<?php
+session_start();
+
+if (isset($_SESSION['user_id'])) {
+    // Check if user role is admin
+    if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
+        header("Location: approval.php"); // Redirect to approval page for admin
+        exit();
+    }
+    
+    include 'navbar_after.php'; // For logged-in users
+    // Display the user_id and role safely
+    $user_id = $_SESSION['user_id'];
+    $role = isset($_SESSION['role']) ? htmlspecialchars($_SESSION['role']) : 'User'; // Default to 'User' if role is not set
+    // echo "<div class='bg-green-100 p-4 text-green-800'>Logged in as User ID: $user_id | Role: $role</div>";
+} else {
+    include 'navbar.php'; // For guests
+}
+
+// ฟังก์ชันเชื่อมต่อฐานข้อมูล
+function connectDatabase($host, $username, $password, $database)
+{
+    $connection = mysqli_connect($host, $username, $password, $database);
+
+    if (!$connection) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+    return $connection;
+} 
+
+// ค่าคงที่สำหรับฐานข้อมูล
+define('DB_HOST', 'db');
+define('DB_USERNAME', 'php_docker');
+define('DB_PASSWORD', 'passwordd');
+define('DB_NAME', 'php_docker');
+
+// เชื่อมต่อฐานข้อมูล
+$connect = connectDatabase(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
+
+// JOIN ตาราง Books กับ Categories และจัดเรียงตามวันที่สร้างล่าสุด
+$query = "
+SELECT b.*, c.category_name
+FROM Books b
+LEFT JOIN Categories c ON b.category_id = c.category_id
+WHERE b.status = 'approved' 
+ORDER BY b.created_at DESC";
+
+$response = mysqli_query($connect, $query);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,40 +59,6 @@
 </head>
 
 <body>
-    <?php include 'navbar.php'; ?>
-
-    <?php
-    // ฟังก์ชันเชื่อมต่อฐานข้อมูล
-    function connectDatabase($host, $username, $password, $database)
-    {
-        $connection = mysqli_connect($host, $username, $password, $database);
-        
-        if (!$connection) {
-            die("Connection failed: " . mysqli_connect_error());
-        }
-
-        return $connection;
-    }
-
-    // ค่าคงที่สำหรับฐานข้อมูล RDS
-    define('DB_HOST', 'YOUR_RDS_ENDPOINT'); // เปลี่ยนเป็น RDS endpoint ของคุณ
-    define('DB_USERNAME', 'admin'); // ชื่อผู้ใช้ RDS
-    define('DB_PASSWORD', 'Password123!'); // รหัสผ่านของ RDS
-    define('DB_NAME', 'php_docker'); // ชื่อฐานข้อมูลที่คุณต้องการเข้าถึง
-
-    // เชื่อมต่อฐานข้อมูล
-    $connect = connectDatabase(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
-
-    // JOIN ตาราง books กับ categories และจัดเรียงตามวันที่สร้างล่าสุด
-    $query = "
-    SELECT b.*, c.name AS category_name
-    FROM books b
-    LEFT JOIN categories c ON b.category_id = c.id
-    ORDER BY b.created_at DESC"; // จัดเรียงจากสร้างล่าสุด
-
-    $response = mysqli_query($connect, $query);
-
-    ?>
 
     <div class="bg-white">
         <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
@@ -52,10 +68,10 @@
                 <?php
                 // Loop ผ่านข้อมูลหนังสือและแสดงข้อมูลเรียงตามวันที่สร้างล่าสุด
                 while ($book = mysqli_fetch_assoc($response)) {
-                    $title = $book['title'];                 // ชื่อหนังสือ
-                    $categoryName = $book['category_name'];  // ชื่อหมวดหมู่
-                    $imageUrl = $book['image_url'];          // URL ของภาพ
-                    $createdAt = $book['created_at'];        // วันที่สร้างหนังสือ
+                    $title = htmlspecialchars($book['title']);                // ชื่อหนังสือ
+                    $categoryName = htmlspecialchars($book['category_name']); // ชื่อหมวดหมู่
+                    $imageUrl = htmlspecialchars($book['image_url']);         // URL ของภาพ
+                    $createdAt = htmlspecialchars($book['created_at']);       // วันที่สร้างหนังสือ
 
                     // แสดงข้อมูลหนังสือในรูปแบบที่ต้องการ
                     echo "
@@ -66,7 +82,7 @@
                         <div class='mt-4 flex justify-between'>
                             <div>
                                 <h3 class='text-sm text-gray-700'>
-                                    <a href='book_details.php?id=" . $book['id'] . "'>
+                                    <a href='book_details.php?id=" . htmlspecialchars($book['book_id']) . "'>
                                         <span aria-hidden='true' class='absolute inset-0'></span>
                                         $title
                                     </a>
