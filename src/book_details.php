@@ -1,6 +1,6 @@
 <?php
 // เชื่อมต่อกับฐานข้อมูล
-$connect = mysqli_connect('db', 'php_docker', 'passwordd', 'php_docker');
+$connect = mysqli_connect('readnet-db.cwbexon7radv.us-east-1.rds.amazonaws.com', 'admin', 'Password123!', 'php_docker');
 
 // ตรวจสอบการเชื่อมต่อ
 if (!$connect) {

@@ -24,9 +24,9 @@
         return $connection;
     }
 
-    define('DB_HOST', 'db'); // Update with your DB host
-    define('DB_USERNAME', 'php_docker'); // Update with your DB username
-    define('DB_PASSWORD', 'passwordd'); // Update with your DB password
+    define('DB_HOST', 'readnet-db.cwbexon7radv.us-east-1.rds.amazonaws.com'); // Update with your DB host
+    define('DB_USERNAME', 'admin'); // Update with your DB username
+    define('DB_PASSWORD', 'Password123!'); // Update with your DB password
     define('DB_NAME', 'php_docker'); // Update with your DB name
 
     $connect = connectDatabase(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);

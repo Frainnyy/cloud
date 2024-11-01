@@ -29,9 +29,9 @@ function connectDatabase($host, $username, $password, $database)
 }
 
 // ค่าคงที่สำหรับฐานข้อมูล
-define('DB_HOST', 'db');
-define('DB_USERNAME', 'php_docker');
-define('DB_PASSWORD', 'passwordd');
+define('DB_HOST', 'readnet-db.cwbexon7radv.us-east-1.rds.amazonaws.com');
+define('DB_USERNAME', 'admin');
+define('DB_PASSWORD', 'Password123!');
 define('DB_NAME', 'php_docker');
 
 // เชื่อมต่อฐานข้อมูล

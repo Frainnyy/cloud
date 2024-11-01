@@ -3,7 +3,7 @@ session_start();
 
 include 'navbar_after.php';
 
-$connection = mysqli_connect('db', 'php_docker', 'passwordd', 'php_docker');
+$connection = mysqli_connect('readnet-db.cwbexon7radv.us-east-1.rds.amazonaws.com', 'admin', 'Password123!', 'php_docker');
 if (!$connection) {
     die("Connection failed: " . mysqli_connect_error());
 }
